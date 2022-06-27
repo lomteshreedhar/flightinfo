@@ -1,0 +1,69 @@
+<html>
+    <head>
+        <title>Virgin Holidays!</title>
+        <link rel="stylesheet" href="styles.css">
+        <link href='https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css' rel='stylesheet'>
+    </head>
+    <body>
+        <div class="header">
+            <img class="logo" src="https://www.virginholidays.co.uk/dam/jcr:0778422e-f543-49cd-b80f-1e954f398abd">
+        </div>
+        <div class="content-wrapper">
+            <div class="date-picker">
+                <span><strong>Enter Date: </strong></span>
+                <input type="text" id="datePicker">
+                <div class="error"></div>
+            </div>
+            <table hidden>
+                <tr>
+                    <th>Departure Time</th>
+                    <th>Destination</th>
+                    <th>Destination Airport Code</th>
+                    <th>Flight Number</th>
+                </tr>
+                <tbody class="tbd">
+                </tbody>
+            </table>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" ></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" ></script>
+        <script>
+            $(document).ready(function() {
+              
+                $(function() {
+                    $( "#datePicker" ).datepicker({
+                        dateFormat: 'yy-mm-dd',
+                        onSelect: function(date) {
+                            $.ajax({
+                                url: 'http://localhost:8080/displayAvailableFlights/'+date+' 00:00:00',
+                                contentType: 'application/json',
+                                success: function(result) {
+                                    $('.error').hide();
+                                    $('table').show();
+                                    var inhtml = '';
+                                    result.forEach(item => {
+                                        var time=item.departureTime.split(":");
+                                        time.splice(2,1);
+                                        time = time.join(":");
+                                        inhtml+= `<tr>
+                                            <td>`+ time +`</td>
+                                            <td>`+ item.destination +`</td>
+                                            <td>`+ item.destinationAirportIata +`</td>
+                                            <td>`+ item.flightNumber +`</td>
+                                        </tr>`;
+                                    });
+                                    $('.tbd').html(inhtml);
+                                },
+                                error: function (request, status, error) {
+                                    $('.error').html(request.responseText);
+                                    $('.error').show();
+                                    $('table').hide();
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>
