@@ -10,7 +10,7 @@ import java.time.LocalTime;
 @Setter
 @Builder
 /**
- * Response object for the controller.
+ * Response object
  */
 public class FlightDetails {
 

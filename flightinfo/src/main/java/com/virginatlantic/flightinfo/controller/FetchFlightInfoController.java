@@ -16,9 +16,8 @@ public class FetchFlightInfoController {
 
     /**
      * This controller method will return the flight details filtered by parameter
-     * @param calendarDate
-     * @param filterParameter
-     * @return flight details filtered by parameter
+     * @param date provided by user
+     * @return flight details list
      */
     @GetMapping("/displayAvailableFlights/{date}")
     public ResponseEntity<Object> getAvailableFlights(@PathVariable String date) {

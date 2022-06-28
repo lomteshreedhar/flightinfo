@@ -23,7 +23,10 @@ public class FlightScheduleImpl implements FlightSchedule {
     FlightDataList flightDataList;
 
     /**
-     * @param dateTime
+     * Fetches list of flights by day of given date.List flightDataList already contain
+     * list of flights by day.
+     *
+     * @param dateTime provided by user
      * @return returns the list of flight details filtered by day of given date.
      */
 

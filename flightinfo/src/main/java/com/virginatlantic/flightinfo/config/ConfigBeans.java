@@ -27,6 +27,11 @@ import java.util.Map;
 public class ConfigBeans {
     private final Map<String, List<FlightDetails>> flightsOnGivenDay = new HashMap<>();
 
+    /**
+     * Reads and parse csv file.
+     * @return FlightDataList consists of list of day wise list of flight details
+     * @throws Exception
+     */
     @Bean
     FlightDataList flightDataList() throws Exception {
         try {
@@ -51,6 +56,11 @@ public class ConfigBeans {
         }
     }
 
+    /**
+     * Populates flightsOnGivenDay list which maintains day wise flight info list
+     * @param flightData list of parsed flight list from file
+     * @throws IllegalAccessException
+     */
     private void populateFlightsOnGivenDay(List<FlightData> flightData) throws IllegalAccessException {
         for (FlightData flight : flightData) {
             List<Field> fields = List.of(flight.getClass().getDeclaredFields());
