@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -31,31 +32,17 @@ public class FetchFlightInfoControllerTest {
     void shouldReturnFlightsData() {
         Mockito.when(flightSchedule.getFlights(ArgumentMatchers.any()))
                 .thenReturn(buildResponseForGoodInputs());
-
+        LocalDate localDate = LocalDate.of(2020, 1, 8);
         ResponseEntity responseEntity = fetchFlightInfoController.getAvailableFlights(
-                "1986-04-21 12:30:30");
+                localDate);
         Assertions.assertEquals("200 OK", responseEntity.getStatusCode().toString());
 
     }
 
     @Test
-    void shouldReturnBadRequestForInvalidDate() {
-
-        ResponseEntity responseEntity = fetchFlightInfoController.getAvailableFlights(
-                "1986-04-21Bad 12:30:30");
-        Assertions.assertEquals("400 BAD_REQUEST", responseEntity.getStatusCode().toString());
-        Assertions.assertEquals(ApplicationConstants.INVALID_DATE, responseEntity.getBody());
-
-    }
-
-    @Test
     void shouldReturnBadRequestForNullDate() {
-
-        ResponseEntity responseEntity = fetchFlightInfoController.getAvailableFlights(
-                null);
-        Assertions.assertEquals("400 BAD_REQUEST", responseEntity.getStatusCode().toString());
-        Assertions.assertEquals(ApplicationConstants.INVALID_DATE, responseEntity.getBody());
-
+       Object response = fetchFlightInfoController.getAvailableFlights(null);
+       Assertions.assertNull(response);
     }
 
     private ResponseEntity<Object> buildResponseForGoodInputs() {

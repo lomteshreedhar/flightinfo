@@ -1,6 +1,5 @@
 package com.virginatlantic.flightinfo.controller;
 
-import com.virginatlantic.flightinfo.constants.ApplicationConstants;
 import com.virginatlantic.flightinfo.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

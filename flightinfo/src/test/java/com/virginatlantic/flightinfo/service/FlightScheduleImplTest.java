@@ -1,6 +1,7 @@
 package com.virginatlantic.flightinfo.service;
 
 import com.virginatlantic.flightinfo.enums.DaysOfWeek;
+import com.virginatlantic.flightinfo.exception.ResourceNotFoundException;
 import com.virginatlantic.flightinfo.model.FlightDataList;
 import com.virginatlantic.flightinfo.model.FlightDetails;
 import org.junit.jupiter.api.Assertions;
@@ -12,6 +13,7 @@ import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,15 +31,16 @@ public class FlightScheduleImplTest {
     @Test
     void shouldReturnListOfFlights() {
         Mockito.when(flightDataList.getFlightsOnGivenDay()).thenReturn(buildFlightDataList());
-
+        LocalDate localDate = LocalDate.of(2021, 8, 23);
         //Monday
-        ResponseEntity responseEntity = schedule.getFlights("2021-08-23 12:30:30");
+        ResponseEntity responseEntity = schedule.getFlights(localDate);
         Assertions.assertEquals("200 OK", responseEntity.getStatusCode().toString());
         List<FlightDetails> flightDetails = (List<FlightDetails>) responseEntity.getBody();
         Assertions.assertEquals(2, flightDetails.size());
 
         //Friday
-        schedule.getFlights("2021-08-20 12:30:30");
+        localDate = LocalDate.of(2021, 8, 20);
+        schedule.getFlights(localDate);
         Assertions.assertEquals("200 OK", responseEntity.getStatusCode().toString());
         flightDetails = (List<FlightDetails>) responseEntity.getBody();
         Assertions.assertEquals(2, flightDetails.size());
@@ -47,10 +50,9 @@ public class FlightScheduleImplTest {
     @Test
     void shouldNotReturnListOfFlights() {
         Mockito.when(flightDataList.getFlightsOnGivenDay()).thenReturn(buildFlightDataList());
-
+        LocalDate localDate = LocalDate.of(2021, 8, 22);
         //Sunday
-        ResponseEntity responseEntity = schedule.getFlights("2021-08-22 12:30:30");
-        Assertions.assertEquals("404 NOT_FOUND", responseEntity.getStatusCode().toString());
+        Assertions.assertThrows(ResourceNotFoundException.class,()-> schedule.getFlights(localDate));
 
     }
 

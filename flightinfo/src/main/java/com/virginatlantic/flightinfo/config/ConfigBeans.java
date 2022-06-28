@@ -37,7 +37,7 @@ public class ConfigBeans {
     @Bean
     FlightDataList flightDataList() throws Exception {
         try {
-            InputStream is = new ClassPathResource("flights.csv").getInputStream();
+            InputStream is = new ClassPathResource("flight_data.csv").getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(is,
                     StandardCharsets.UTF_8));
             CsvToBean<FlightData> csvToBean = new CsvToBeanBuilder<FlightData>(br)

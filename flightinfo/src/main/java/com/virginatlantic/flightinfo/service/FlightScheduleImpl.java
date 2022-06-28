@@ -1,7 +1,7 @@
 package com.virginatlantic.flightinfo.service;
 
 import com.virginatlantic.flightinfo.applicationUtils.DepartureTimeComparator;
-import com.virginatlantic.flightinfo.applicationUtils.Utils;
+import com.virginatlantic.flightinfo.exception.ResourceNotFoundException;
 import com.virginatlantic.flightinfo.model.FlightDataList;
 import com.virginatlantic.flightinfo.model.FlightDetails;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +14,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.virginatlantic.flightinfo.constants.ApplicationConstants.DATE_FORMAT;
-
 
 @Service
 public class FlightScheduleImpl implements FlightSchedule {
@@ -27,14 +25,12 @@ public class FlightScheduleImpl implements FlightSchedule {
      * Fetches list of flights by day of given date.List flightDataList already contain
      * list of flights by day.
      *
-     * @param dateTime provided by user
+     * @param localDate date provided by user
      * @return returns the list of flight details filtered by day of given date.
      */
 
     @Override
-    public ResponseEntity<Object> getFlights(String dateTime) {
-            LocalDate localDate = Utils.parseDate(dateTime, DATE_FORMAT);
-
+    public ResponseEntity<Object> getFlights(LocalDate localDate) {
             List<FlightDetails> flightDetailsList = flightDataList.getFlightsOnGivenDay()
                     .get(localDate.getDayOfWeek().name().toLowerCase());
 
@@ -43,7 +39,7 @@ public class FlightScheduleImpl implements FlightSchedule {
                         .sorted(new DepartureTimeComparator())
                         .collect(Collectors.toList()));
             } else {
-                return ResponseEntity.notFound().build();
+                throw new ResourceNotFoundException();
             }
 
     }

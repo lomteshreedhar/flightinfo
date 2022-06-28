@@ -1,13 +1,16 @@
 package com.virginatlantic.flightinfo.controller;
 
-import com.virginatlantic.flightinfo.constants.ApplicationConstants;
 import com.virginatlantic.flightinfo.service.FlightScheduleImpl;
-import com.virginatlantic.flightinfo.validator.DateValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDate;
+
+import static com.virginatlantic.flightinfo.constants.ApplicationConstants.DATE_FORMAT;
 
 @RestController
 public class FetchFlightInfoController {
@@ -20,11 +23,7 @@ public class FetchFlightInfoController {
      * @return flight details list
      */
     @GetMapping("/displayAvailableFlights/{date}")
-    public ResponseEntity<Object> getAvailableFlights(@PathVariable String date) {
-
-        if (!DateValidator.isValidDate(date, ApplicationConstants.DATE_FORMAT)) {
-            return ResponseEntity.badRequest().body(ApplicationConstants.INVALID_DATE);
-        }
+    public ResponseEntity<Object> getAvailableFlights(@PathVariable @DateTimeFormat(pattern = DATE_FORMAT) LocalDate date) {
 
         return flightSchedule.getFlights(date);
 
