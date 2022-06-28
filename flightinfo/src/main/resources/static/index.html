@@ -35,7 +35,7 @@
                         dateFormat: 'yy-mm-dd',
                         onSelect: function(date) {
                             $.ajax({
-                                url: 'http://localhost:8080/displayAvailableFlights/'+date+' 00:00:00',
+                                url: 'http://localhost:8080/displayAvailableFlights/'+date+'',
                                 contentType: 'application/json',
                                 success: function(result) {
                                     $('.error').hide();

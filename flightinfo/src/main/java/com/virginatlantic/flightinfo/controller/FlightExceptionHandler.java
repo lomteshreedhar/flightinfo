@@ -1,5 +1,6 @@
 package com.virginatlantic.flightinfo.controller;
 
+import com.virginatlantic.flightinfo.constants.ApplicationConstants;
 import com.virginatlantic.flightinfo.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,12 +13,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
     public class FlightExceptionHandler extends ResponseEntityExceptionHandler {
 
         @ExceptionHandler(Exception.class)
-        public final ResponseEntity<Object> handleAllExceptions(Exception ex) {
-            return new ResponseEntity("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        public final ResponseEntity<String> handleAllExceptions(Exception ex) {
+            return ResponseEntity.internalServerError().body("Internal Server Error");
         }
 
         @ExceptionHandler(ResourceNotFoundException.class)
-        public final ResponseEntity<Object> handleUserNotFoundException(ResourceNotFoundException ex) {
-            return new ResponseEntity("No Flight Available", HttpStatus.NOT_FOUND);
+        public final ResponseEntity<String> handleUserNotFoundException(ResourceNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Flight Available");
         }
 }

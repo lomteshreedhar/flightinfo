@@ -12,11 +12,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 
 @SpringBootApplication
-public class VirjinAtlanticFlightInfo {
+public class VirginAtlanticFlightInfo {
 
     public static void main(String[] args) {
 
-        SpringApplication.run(VirjinAtlanticFlightInfo.class, args);
+        SpringApplication.run(VirginAtlanticFlightInfo.class, args);
     }
 
 }

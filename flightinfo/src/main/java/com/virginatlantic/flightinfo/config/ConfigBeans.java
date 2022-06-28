@@ -25,12 +25,14 @@ import java.util.Map;
 @Configuration
 @Slf4j
 public class ConfigBeans {
+
+    // This hashMap will store Key as Day i.e. SUNDAY and value as List of all flights departing on SUNDAY
     private final Map<String, List<FlightDetails>> flightsOnGivenDay = new HashMap<>();
 
     /**
      * Reads and parse csv file.
      * @return FlightDataList consists of list of day wise list of flight details
-     * @throws Exception
+     * @throws Exception in case of any exception happens while file read or parsing
      */
     @Bean
     FlightDataList flightDataList() throws Exception {
@@ -59,17 +61,20 @@ public class ConfigBeans {
     /**
      * Populates flightsOnGivenDay list which maintains day wise flight info list
      * @param flightData list of parsed flight list from file
-     * @throws IllegalAccessException
+     * @throws IllegalAccessException for any exception while operating on reflection
      */
     private void populateFlightsOnGivenDay(List<FlightData> flightData) throws IllegalAccessException {
         for (FlightData flight : flightData) {
+            // for each FlightData object identify which field has value 'X' populated with help of reflection
             List<Field> fields = List.of(flight.getClass().getDeclaredFields());
             for (Field field : fields) {
                 if (DaysOfWeek.isElementPresent(field.getName().toUpperCase())
                         && (getFieldData(field, flight)).equalsIgnoreCase("X")) {
+                    //check the hashmap key i.e. day name already present then append FlightDetails object in the list
                     if (flightsOnGivenDay.get(field.getName()) != null) {
                         flightsOnGivenDay.get(field.getName()).add(populateFlight(flight));
                     } else {
+                        // create new element (key,value) in hashmap
                         flightsOnGivenDay.put(field.getName(), new ArrayList<>() {
                                     {
                                         add(populateFlight(flight));

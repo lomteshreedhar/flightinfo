@@ -1,7 +1,7 @@
 package com.virginatlantic.flightinfo.service;
 
-import com.virginatlantic.flightinfo.ApplicationUtils.DepartureTimeComparator;
-import com.virginatlantic.flightinfo.ApplicationUtils.Utils;
+import com.virginatlantic.flightinfo.applicationUtils.DepartureTimeComparator;
+import com.virginatlantic.flightinfo.applicationUtils.Utils;
 import com.virginatlantic.flightinfo.model.FlightDataList;
 import com.virginatlantic.flightinfo.model.FlightDetails;
 import org.springframework.http.ResponseEntity;
@@ -10,11 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.virginatlantic.flightinfo.constants.ApplicationConstants.*;
+import static com.virginatlantic.flightinfo.constants.ApplicationConstants.DATE_FORMAT;
+
 
 @Service
 public class FlightScheduleImpl implements FlightSchedule {
@@ -32,10 +33,10 @@ public class FlightScheduleImpl implements FlightSchedule {
 
     @Override
     public ResponseEntity<Object> getFlights(String dateTime) {
-            LocalDateTime localDateTime = Utils.parseDate(dateTime, DATEFORMAT);
+            LocalDate localDate = Utils.parseDate(dateTime, DATE_FORMAT);
 
             List<FlightDetails> flightDetailsList = flightDataList.getFlightsOnGivenDay()
-                    .get(localDateTime.getDayOfWeek().name().toLowerCase());
+                    .get(localDate.getDayOfWeek().name().toLowerCase());
 
             if (!CollectionUtils.isEmpty(flightDetailsList)) {
                 return ResponseEntity.ok().body(flightDetailsList.stream()
